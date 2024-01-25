@@ -27,6 +27,8 @@ import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--raf_path', type=str, default='/import/nobackup_mmv_ioannisp/zs003/face_emotion_rec', help='raf_dataset_path')
+parser.add_argument('--raf_label_path', type=str, default='/homes/zs003/paper_face/face_emotion_rec/fer_testssl/raf-basic', help='raf_label_dataset_path')
+
 parser.add_argument('--resnet50_path', type=str, default='../model/resnet50_ft_weight.pkl', help='pretrained_backbone_path')
 parser.add_argument('--model_dir', type=str, default='/import/nobackup_mmv_ioannisp/zs003/checkpoints/face_rec/ssl_results/Webface_real1shot_landmark_all3pertur_ViTB/checkpoint0040.pth', help='fromLAFS_DINO_model_dir')
 parser.add_argument('--mobi_pretrain', type=str, default='/import/nobackup_mmv_ioannisp/zs003/checkpoints/face_rec/results/webface_196landmark/Backbone_VIT_land_8_Epoch_34_Batch_327225_Time_2022-05-05-10-34_checkpoint.pth', help='mobi_pretrain')
