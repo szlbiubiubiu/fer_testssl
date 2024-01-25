@@ -100,7 +100,8 @@ class Model_withvit(nn.Module):
         self.fc = nn.Linear(768, 7)  
         
         
-    def forward(self, x):        
+    def forward(self, x):    
+        pdb.set_trace()    
         x = self.features(x)
         #### 1, 2048, 7, 7
         feature = self.features2(x)
