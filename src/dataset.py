@@ -43,6 +43,7 @@ class RafDataset(data.Dataset):
 
     def __getitem__(self, idx):
         label = self.label[idx]
+        pdb.set_trace()
         image = cv2.imread(self.file_paths[idx])
             
         image = image[:, :, ::-1]
