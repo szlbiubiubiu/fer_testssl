@@ -25,6 +25,7 @@ from loss import ACLoss
 
 import pdb
 from tqdm import tqdm
+from warmup_scheduler import GradualWarmupScheduler
 parser = argparse.ArgumentParser()
 parser.add_argument('--raf_path', type=str, default='/import/nobackup_mmv_ioannisp/zs003/face_emotion_rec', help='raf_dataset_path')
 parser.add_argument('--raf_label_path', type=str, default='/homes/zs003/paper_face/face_emotion_rec/fer_testssl/raf-basic', help='raf_label_dataset_path')
@@ -41,7 +42,82 @@ parser.add_argument('--lam', type=float, default=5, help='kl_lambda')
 parser.add_argument('--epochs', type=int, default=60, help='number of epochs')
 args = parser.parse_args()
 
+def get_layer_id_for_vit(name, num_layers):
+    """
+    Assign a parameter with its layer id
+    Following BEiT: https://github.com/microsoft/unilm/blob/master/beit/optim_factory.py#L33
+    """
+    
+    if name in ['cls_token', 'pos_embedding']:
+        return 0
+    elif name.startswith('patch_to_embedding'):
+        return 0
+    elif name.startswith('stn'):
+        # pdb.set_trace()
+        return 0#0,num_layers
+    elif name.startswith('output_layer'):
+        # pdb.set_trace()
+        return 0#0
+    elif name.startswith('global_token'):
+        # pdb.set_trace()
+        return 0
+    elif name.startswith('transformer'):#layers
+        return int(name.split('.')[2]) + 1
+    
+    else:
+        return num_layers
+def param_groups_lrd(model, weight_decay=0.05, no_weight_decay_list=[],low_weight_decay_list=[], layer_decay=.6):
+    """
+    Parameter groups for layer-wise lr decay
+    Following BEiT: https://github.com/microsoft/unilm/blob/master/beit/optim_factory.py#L58
+    """
+    param_group_names = {}
+    param_groups = {}
+    # pdb.set_trace()
+    # num_layers = len(model.blocks) + 1
+    num_layers = len(model.transformer.layers) + 1
+    
 
+    layer_scales = list(layer_decay ** (num_layers - i) for i in range(num_layers + 1))
+
+    for n, p in model.named_parameters():
+        if not p.requires_grad:
+            continue
+
+        # no decay: all 1D parameters and model specific ones
+        if p.ndim == 1 or n in no_weight_decay_list:
+            g_decay = "no_decay"
+            this_decay = 0.
+        elif n.startswith('stn'):
+            g_decay = "low_decay"
+            this_decay = 5e-2
+        else:
+            g_decay = "decay"
+            this_decay = weight_decay
+            
+        layer_id = get_layer_id_for_vit(n, num_layers)
+        group_name = "layer_%d_%s" % (layer_id, g_decay)
+
+        if group_name not in param_group_names:
+            this_scale = layer_scales[layer_id]
+
+            param_group_names[group_name] = {
+                "lr_scale": this_scale,
+                "weight_decay": this_decay,
+                "params": [],
+            }
+            param_groups[group_name] = {
+                "lr_scale": this_scale,
+                "weight_decay": this_decay,
+                "params": [],
+            }
+
+        param_group_names[group_name]["params"].append(n)
+        param_groups[group_name]["params"].append(p)
+    # pdb.set_trace()
+    # print("parameter groups: \n%s" % json.dumps(param_group_names, indent=2))
+
+    return list(param_groups.values())
 def train(args, model, train_loader, optimizer, scheduler, device):
     running_loss = 0.0
     iter_cnt = 0
@@ -184,11 +260,25 @@ def main():
     
     device = torch.device('cuda:{}'.format(args.gpu))
     model.to(device)
+    param_groups=param_groups_lrd(model, 1e-1,
+    no_weight_decay_list=[],
+    layer_decay=0.58)
+    # # param_groups=param_groups_lrd(BACKBONE, 5e-2,
+    # #     no_weight_decay_list=[],
+    # #     layer_decay=0.6)
+    optimizer = torch.optim.AdamW(param_groups,
+                            lr = args.lr,
+                            # weight_decay = 1e-1,#0.05,5e-4#5e-2
+                            # momentum = conf.momentum
+                        )
+    # optimizer = torch.optim.Adam(model.parameters() , lr=0.00001, weight_decay=1e-4)
+    # scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
 
-    optimizer = torch.optim.Adam(model.parameters() , lr=0.0001, weight_decay=1e-4)
-    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.9)
+    max_steps=(args.epochs-5-0)*len(train_dataset)//args.batch_size
+    scheduler=torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max= max_steps, eta_min=1e-6)#optimizer_stn,optimizer
+    if args.warmup_epochs>0:
 
-    
+        scheduler = GradualWarmupScheduler(optimizer, multiplier=1, total_epoch=args.warmup_epochs*len(train_dataset)//args.batch_size, after_scheduler=scheduler)
    
     
     
