@@ -101,7 +101,7 @@ class Model_withvit_noloss(nn.Module):
         
         
     def forward(self, x):    
-        pdb.set_trace()    
+        # pdb.set_trace()    
         emb=self.backbone(x)
         output=self.fc(emb)
         return output#, hm
