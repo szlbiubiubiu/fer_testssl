@@ -18,7 +18,7 @@ import torch.utils.data as data
 import torch.nn.functional as F
 
 from dataset import RafDataset
-from model import Model,Model_withvit
+from model import Model,Model_withvit,Model_withvit_noloss
 from utils import *
 from resnet import *
 from loss import ACLoss
@@ -179,7 +179,7 @@ def main():
     
     
     # model = Model(args)
-    model=Model_withvit(args)
+    model=Model_withvit_noloss(args)
     
     device = torch.device('cuda:{}'.format(args.gpu))
     model.to(device)

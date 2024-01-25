@@ -42,7 +42,7 @@ def load_part_checkpoint_landmark(path,model,pretrain_name=['stn','output'],free
 class Model_withvit_noloss(nn.Module):
     
     def __init__(self, args, pretrained=True, num_classes=7):
-        super(Model_withvit, self).__init__()
+        super(Model_withvit_noloss, self).__init__()
         # resnet50 = ResNet(Bottleneck, [3, 4, 6, 3])
         HEAD_NAME='CosFace'
         num_patches=196  
