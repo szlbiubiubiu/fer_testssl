@@ -161,7 +161,7 @@ def train(args, model, train_loader, optimizer, scheduler, device):
         correct_sum += correct_num
         running_loss += loss
 
-    scheduler.step()
+        scheduler.step()
     running_loss = running_loss / iter_cnt
     acc = correct_sum.float() / float(train_loader.dataset.__len__())
     return acc, running_loss
@@ -276,9 +276,9 @@ def main():
 
     max_steps=(args.epochs-5-0)*len(train_dataset)//args.batch_size
     scheduler=torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,T_max= max_steps, eta_min=1e-6)#optimizer_stn,optimizer
-    if args.warmup_epochs>0:
+    # if args.warmup_epochs>0:
 
-        scheduler = GradualWarmupScheduler(optimizer, multiplier=1, total_epoch=args.warmup_epochs*len(train_dataset)//args.batch_size, after_scheduler=scheduler)
+    scheduler = GradualWarmupScheduler(optimizer, multiplier=1, total_epoch=5*len(train_dataset)//args.batch_size, after_scheduler=scheduler)
    
     
     
