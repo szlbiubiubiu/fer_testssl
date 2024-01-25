@@ -13,14 +13,14 @@ class RafDataset(data.Dataset):
         self.phase = phase
         self.basic_aug = basic_aug
         self.transform = transform
-        df = pd.read_csv(os.path.join(self.raf_path, 'EmoLabel', args.label_path), sep=' ', header=None)
+        df = pd.read_csv(os.path.join(self.raf_path,  args.label_path), sep=' ', header=None)
         
         name_c = 0
         label_c = 1
         if phase == 'train':
             dataset = df[df[name_c].str.startswith('train')]
         else:
-            df = pd.read_csv(os.path.join(self.raf_path, 'EmoLabel/list_patition_label.txt'), sep=' ', header=None)
+            df = pd.read_csv(os.path.join(self.raf_path, 'list_patition_label.txt'), sep=' ', header=None)
             dataset = df[df[name_c].str.startswith('test')]
             
         self.label = dataset.iloc[:, label_c].values - 1
