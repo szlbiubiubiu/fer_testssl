@@ -130,21 +130,34 @@ def test(model, test_loader, device):
 def main():    
     setup_seed(0)
     
+    # train_transforms = transforms.Compose([
+    #     transforms.ToPILImage(),
+    #     transforms.Resize((224, 224)),
+    #     transforms.ToTensor(),
+    #     transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                          std=[0.229, 0.224, 0.225]),
+    #     transforms.RandomErasing(scale=(0.02, 0.25)) ])
+    
+    # eval_transforms = transforms.Compose([
+    #     transforms.ToPILImage(),
+    #     transforms.Resize((224, 224)),
+    #     transforms.ToTensor(),
+    #     transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                          std=[0.229, 0.224, 0.225])])
     train_transforms = transforms.Compose([
         transforms.ToPILImage(),
-        transforms.Resize((224, 224)),
+        transforms.Resize((112, 112)),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                             std=[0.229, 0.224, 0.225]),
+        transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                             std=[0.5, 0.5, 0.5]),
         transforms.RandomErasing(scale=(0.02, 0.25)) ])
     
     eval_transforms = transforms.Compose([
         transforms.ToPILImage(),
-        transforms.Resize((224, 224)),
+        transforms.Resize((112, 112)),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                             std=[0.229, 0.224, 0.225])])
-    
+        transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                             std=[0.5, 0.5, 0.5])])
     
 
     train_dataset = RafDataset(args, phase='train', transform=train_transforms)
