@@ -260,7 +260,7 @@ def main():
     
     device = torch.device('cuda:{}'.format(args.gpu))
     model.to(device)
-    param_groups=param_groups_lrd(model.BACKBONE, 1e-1,
+    param_groups=param_groups_lrd(model.backbone, 1e-1,
     no_weight_decay_list=[],
     layer_decay=0.58)
     # # param_groups=param_groups_lrd(BACKBONE, 5e-2,
