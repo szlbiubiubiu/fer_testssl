@@ -24,7 +24,7 @@ from resnet import *
 from loss import ACLoss
 
 import pdb
-
+from tqdm import tqdm
 parser = argparse.ArgumentParser()
 parser.add_argument('--raf_path', type=str, default='/import/nobackup_mmv_ioannisp/zs003/face_emotion_rec', help='raf_dataset_path')
 parser.add_argument('--raf_label_path', type=str, default='/homes/zs003/paper_face/face_emotion_rec/fer_testssl/raf-basic', help='raf_label_dataset_path')
@@ -51,7 +51,7 @@ def train(args, model, train_loader, optimizer, scheduler, device):
     model.train()
 
     total_loss = []
-    for batch_i, (imgs1, labels, indexes, imgs2) in enumerate(train_loader):
+    for batch_i, (imgs1, labels, indexes, imgs2) in tqdm(enumerate(train_loader)):
         imgs1 = imgs1.to(device)
         imgs2 = imgs2.to(device)
         labels = labels.to(device)
