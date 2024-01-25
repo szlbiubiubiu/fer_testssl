@@ -6,13 +6,14 @@ import pandas as pd
 import random
 from torchvision import transforms
 from utils import *
-
+import pdb
 class RafDataset(data.Dataset):
     def __init__(self, args, phase, basic_aug=True, transform=None):
         self.raf_path = args.raf_path
         self.phase = phase
         self.basic_aug = basic_aug
         self.transform = transform
+        pdb.set_trace()
         df = pd.read_csv(os.path.join(self.raf_label_path, 'EmoLabel', args.label_path), sep=' ', header=None)
         
         name_c = 0
