@@ -10,6 +10,7 @@ import pdb
 class RafDataset(data.Dataset):
     def __init__(self, args, phase, basic_aug=True, transform=None):
         self.raf_path = args.raf_path
+        self.raf_label_path=args.raf_label_path
         self.phase = phase
         self.basic_aug = basic_aug
         self.transform = transform
