@@ -267,7 +267,7 @@ def main():
     # #     no_weight_decay_list=[],
     # #     layer_decay=0.6)
     optimizer = torch.optim.AdamW(param_groups,
-                            lr = args.lr,
+                            lr = 1e-4,
                             # weight_decay = 1e-1,#0.05,5e-4#5e-2
                             # momentum = conf.momentum
                         )
