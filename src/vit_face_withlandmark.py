@@ -8,7 +8,7 @@ from IPython import embed
 import numpy as np
 MIN_NUM_PATCHES = 15
 # from vit_pytorch_my.mobilenet_v3_my import MobileNetV3_backbone
-from vit_pytorch_my.mobilenet_v3_my import MobileNetV3_backbone
+from mobilenet_v3_my import MobileNetV3_backbone
 # from vit_pytorch_my.EfficientNet import EfficientNet
 # from vit_pytorch_my.mobilevit import MobileViT
 import pdb
