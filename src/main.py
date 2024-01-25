@@ -18,14 +18,18 @@ import torch.utils.data as data
 import torch.nn.functional as F
 
 from dataset import RafDataset
-from model import Model
+from model import Model,Model_withvit
 from utils import *
 from resnet import *
 from loss import ACLoss
 
+import pdb
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--raf_path', type=str, default='../raf-basic', help='raf_dataset_path')
+parser.add_argument('--raf_path', type=str, default='/import/nobackup_mmv_ioannisp/zs003/face_emotion_rec', help='raf_dataset_path')
 parser.add_argument('--resnet50_path', type=str, default='../model/resnet50_ft_weight.pkl', help='pretrained_backbone_path')
+parser.add_argument('--model_dir', type=str, default='/import/nobackup_mmv_ioannisp/zs003/checkpoints/face_rec/ssl_results/Webface_real1shot_landmark_all3pertur_ViTB/checkpoint0040.pth', help='fromLAFS_DINO_model_dir')
+parser.add_argument('--mobi_pretrain', type=str, default='/import/nobackup_mmv_ioannisp/zs003/checkpoints/face_rec/results/webface_196landmark/Backbone_VIT_land_8_Epoch_34_Batch_327225_Time_2022-05-05-10-34_checkpoint.pth', help='mobi_pretrain')
 parser.add_argument('--label_path', type=str, default='list_patition_label.txt', help='label_path')
 parser.add_argument('--workers', type=int, default=4, help='number of workers')
 parser.add_argument('--batch_size', type=int, default=32, help='batch_size')
@@ -160,7 +164,8 @@ def main():
     
     
     
-    model = Model(args)
+    # model = Model(args)
+    model=Model_withvit(args)
     
     device = torch.device('cuda:{}'.format(args.gpu))
     model.to(device)
