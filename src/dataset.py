@@ -14,7 +14,7 @@ class RafDataset(data.Dataset):
         self.phase = phase
         self.basic_aug = basic_aug
         self.transform = transform
-        pdb.set_trace()
+        # pdb.set_trace()
         df = pd.read_csv(os.path.join(self.raf_label_path, 'EmoLabel', args.label_path), sep=' ', header=None)
         
         name_c = 0
@@ -34,7 +34,7 @@ class RafDataset(data.Dataset):
         for f in images_names:
             f = f.split(".")[0]
             f += '_aligned.jpg'
-            file_name = os.path.join(self.raf_path, 'Image/aligned', f)
+            file_name = os.path.join(self.raf_path, 'aligned', f)
             self.file_paths.append(file_name)
 
 

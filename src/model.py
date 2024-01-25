@@ -48,7 +48,7 @@ class Model_withvit(nn.Module):
         num_patches=196  
         patch_size=8
         with_land=True
-        pdb.set_trace()
+        # pdb.set_trace()
         BACKBONE=ViT_face_landmark_patch8(
                                 loss_type = HEAD_NAME,
                                 GPU_ID = None,
