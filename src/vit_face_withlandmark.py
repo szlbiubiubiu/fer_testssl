@@ -612,8 +612,8 @@ class ViT_face_landmark_patch8(nn.Module):
         p = self.patch_size
         
 
-        # if len(x.shape)==4:
-        #     x=x/255.0*2-1  #no mean
+        if len(x.shape)==4:
+            x=x/255.0*2-1  #no mean
             #test ms1m   #switch rgb
             # x=x[:,::-1,:,:]
             # x=x.flip(1)
@@ -637,7 +637,7 @@ class ViT_face_landmark_patch8(nn.Module):
 
             theta=theta.view(-1,self.row_num*self.row_num,2)
             self.theta=theta#.detach()
-            pdb.set_trace()
+
             x=extract_patches_pytorch_gridsample(x,theta,patch_shape=self.patch_shape,num_landm=int(self.row_num*self.row_num))
             
         if len(x.shape)==4:

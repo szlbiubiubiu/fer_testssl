@@ -59,19 +59,19 @@ def train(args, model, train_loader, optimizer, scheduler, device):
 
         criterion = nn.CrossEntropyLoss(reduction='none')
 
+        output = model(imgs1)
 
-
-        output, hm1 = model(imgs1)
-        output_flip, hm2 = model(imgs2)
+        # output, hm1 = model(imgs1)
+        # output_flip, hm2 = model(imgs2)
         
-        grid_l = generate_flip_grid(args.w, args.h, device)
+        # grid_l = generate_flip_grid(args.w, args.h, device)
         
 
         loss1 = nn.CrossEntropyLoss()(output, labels)
-        flip_loss_l = ACLoss(hm1, hm2, grid_l, output)
+        # flip_loss_l = ACLoss(hm1, hm2, grid_l, output)
 
 
-        loss = loss1 + args.lam * flip_loss_l
+        loss = loss1 #+ args.lam * flip_loss_l
 
 
         optimizer.zero_grad()
