@@ -123,6 +123,7 @@ def test(model, test_loader, device):
 
         running_loss = running_loss / iter_cnt
         test_acc = correct_sum.float() / float(data_num)
+        print('text_acc',test_acc)
     return test_acc, running_loss
         
         
