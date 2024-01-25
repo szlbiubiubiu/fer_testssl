@@ -107,7 +107,7 @@ def test(model, test_loader, device):
             labels = labels.to(device)
 
 
-            outputs, _ = model(imgs1)
+            outputs= model(imgs1)
 
 
             loss = nn.CrossEntropyLoss()(outputs, labels)
